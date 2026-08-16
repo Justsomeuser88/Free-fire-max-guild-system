@@ -40,6 +40,7 @@ fun GuildToolsScreen(
     val members by viewModel.allMembers.collectAsState()
 
     var showAddRewardDialog by remember { mutableStateOf(false) }
+    var showApkDownloadDialog by remember { mutableStateOf(false) }
 
     // Stylish Name Generator State
     var rawName by remember { mutableStateOf("VIPER") }
@@ -368,6 +369,113 @@ fun GuildToolsScreen(
                 }
             }
         }
+
+        // TOOL 4: Direct APK Download & GitHub Releases
+        item {
+            FFCard(
+                modifier = Modifier.fillMaxWidth(),
+                borderColor = FFEmeraldGreen.copy(alpha = 0.5f)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text("📲", fontSize = 18.sp)
+                        Column {
+                            Text(
+                                text = "GITHUB DIRECT APK DOWNLOAD",
+                                style = MaterialTheme.typography.labelLarge.copy(
+                                    fontWeight = FontWeight.Black,
+                                    color = FFEmeraldGreen
+                                )
+                            )
+                            Text(
+                                text = "Install FF Guild Master APK on physical Android phones",
+                                style = MaterialTheme.typography.bodySmall.copy(color = FFTextSecondary)
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(FFDarkSurfaceVariant)
+                        .padding(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(Icons.Default.DownloadForOffline, contentDescription = null, tint = FFEmeraldGreen)
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Automated CI/CD Workflow Ready",
+                            color = FFTextPrimary,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 12.sp
+                        )
+                        Text(
+                            text = "Every push/tag automatically builds FF-Guild-Master.apk via GitHub Actions.",
+                            color = FFTextMuted,
+                            fontSize = 10.sp
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(
+                        onClick = { showApkDownloadDialog = true },
+                        colors = ButtonDefaults.buttonColors(containerColor = FFEmeraldGreen),
+                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.weight(1f).height(38.dp).testTag("open_apk_download_guide_button")
+                    ) {
+                        Icon(Icons.Default.InstallMobile, contentDescription = null, tint = FFDarkBackground, modifier = Modifier.size(16.dp))
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text("APK Download Guide", color = FFDarkBackground, fontWeight = FontWeight.Bold, fontSize = 11.sp)
+                    }
+
+                    OutlinedButton(
+                        onClick = {
+                            val instructions = """
+                                📲【FF GUILD MASTER - DIRECT APK DOWNLOAD】📲
+                                
+                                1. Open GitHub Releases:
+                                   https://github.com/your-username/ff-guild-master/releases
+                                2. Download 'FF-Guild-Master.apk' directly under Assets.
+                                3. Open the downloaded file on your Android phone and tap Install!
+                                *(Make sure 'Install Unknown Apps' is allowed in Settings)*
+                            """.trimIndent()
+                            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                            val clip = ClipData.newPlainText("APK Instructions", instructions)
+                            clipboard.setPrimaryClip(clip)
+                            Toast.makeText(context, "APK Download instructions copied!", Toast.LENGTH_SHORT).show()
+                        },
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = FFFireGold),
+                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.height(38.dp).testTag("copy_apk_instructions_button")
+                    ) {
+                        Icon(Icons.Default.ContentCopy, contentDescription = null, tint = FFFireGold, modifier = Modifier.size(14.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text("Copy Link", fontSize = 11.sp)
+                    }
+                }
+            }
+        }
+    }
+
+    if (showApkDownloadDialog) {
+        ApkDownloadDialog(
+            onDismiss = { showApkDownloadDialog = false }
+        )
     }
 
     if (showAddRewardDialog) {
@@ -456,3 +564,132 @@ fun AddRewardDialog(
         containerColor = FFDarkSurfaceCard
     )
 }
+
+@Composable
+fun ApkDownloadDialog(
+    onDismiss: () -> Unit
+) {
+    val context = LocalContext.current
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text("📲", fontSize = 20.sp)
+                Text(
+                    text = "Download APK from GitHub",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = FFEmeraldGreen
+                    )
+                )
+            }
+        },
+        text = {
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                item {
+                    Text(
+                        text = "Follow these 3 easy steps to install the app on your physical phone:",
+                        style = MaterialTheme.typography.bodySmall.copy(color = FFTextSecondary)
+                    )
+                }
+
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(FFDarkSurfaceVariant)
+                            .padding(10.dp)
+                    ) {
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(
+                                text = "1️⃣ Go to GitHub Releases or Actions Tab",
+                                style = MaterialTheme.typography.labelMedium.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = FFFireGold
+                                )
+                            )
+                            Text(
+                                text = "Open the repository in your mobile browser or PC.",
+                                style = MaterialTheme.typography.bodySmall.copy(color = FFTextPrimary, fontSize = 11.sp)
+                            )
+                        }
+                    }
+                }
+
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(FFDarkSurfaceVariant)
+                            .padding(10.dp)
+                    ) {
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(
+                                text = "2️⃣ Tap on 'FF-Guild-Master.apk'",
+                                style = MaterialTheme.typography.labelMedium.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = FFFireOrange
+                                )
+                            )
+                            Text(
+                                text = "Under Assets in Releases, or download the Artifact from GitHub Actions.",
+                                style = MaterialTheme.typography.bodySmall.copy(color = FFTextPrimary, fontSize = 11.sp)
+                            )
+                        }
+                    }
+                }
+
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(FFDarkSurfaceVariant)
+                            .padding(10.dp)
+                    ) {
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(
+                                text = "3️⃣ Open & Tap Install",
+                                style = MaterialTheme.typography.labelMedium.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = FFEmeraldGreen
+                                )
+                            )
+                            Text(
+                                text = "Android will ask to allow 'Install unknown apps'. Enable it to complete installation.",
+                                style = MaterialTheme.typography.bodySmall.copy(color = FFTextPrimary, fontSize = 11.sp)
+                            )
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            FFGamingButton(
+                text = "Copy GitHub Release URL",
+                onClick = {
+                    val url = "https://github.com/your-username/ff-guild-master/releases/latest"
+                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clip = ClipData.newPlainText("Releases URL", url)
+                    clipboard.setPrimaryClip(clip)
+                    Toast.makeText(context, "GitHub Releases URL copied to clipboard!", Toast.LENGTH_SHORT).show()
+                },
+                testTag = "copy_release_url_button"
+            )
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text("Close", color = FFTextSecondary) }
+        },
+        containerColor = FFDarkSurfaceCard
+    )
+}
+
