@@ -1,0 +1,6 @@
+{
+  "name": "FF Guild Master",
+  "description": "Comprehensive Free Fire Guild Management System for managing rosters, Friday dog tag tournaments, scrims, squad lineups, recruitment, and clan notices.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

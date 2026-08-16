@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Deep Dark Gaming Background -->
+    <path
+        android:pathData="M0,0h108v108h-108z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="0"
+                android:startY="0"
+                android:endX="108"
+                android:endY="108"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#FF0D0F18" />
+                <item android:offset="0.5" android:color="#FF161A28" />
+                <item android:offset="1.0" android:color="#FF241208" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Fiery Glowing Accents -->
+    <path
+        android:pathData="M0,108 L108,0 L108,108 Z"
+        android:fillAlpha="0.15">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="108"
+                android:startY="108"
+                android:endX="40"
+                android:endY="40"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#FFFF6D00" />
+                <item android:offset="1.0" android:color="#00000000" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Tech Lines & Grid -->
+    <path
+        android:pathData="M24,24 L84,24 L96,36 L96,84 L84,96 L24,96 L12,84 L12,36 Z"
+        android:strokeWidth="1.2"
+        android:strokeAlpha="0.25"
+        android:strokeColor="#FFFFAB00"
+        android:fillColor="#00000000" />
+</vector>
